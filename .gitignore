@@ -1,0 +1,5 @@
+# QtCreator project file
+CMakeLists.txt.user*
+
+build/*
+
