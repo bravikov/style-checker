@@ -18,6 +18,10 @@ add_executable(unit-tests
     src/LineSplitterTest.cpp
 )
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(unit-tests Threads::Threads)
+
 set_property(TARGET unit-tests PROPERTY CXX_STANDARD 17)
 target_compile_options(unit-tests PRIVATE -Werror -Wall -Wextra -Wpedantic)
 

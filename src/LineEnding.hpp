@@ -9,8 +9,10 @@ class LineEnding
 public:
     std::size_t size() const;
     char operator[](const std::size_t position) const;
-    std::string escapedView() const;
+    std::string_view view() const;
+    std::string escaped() const;
 
+    static const LineEnding none;
     static const LineEnding lf; // Unix-like
     static const LineEnding crlf; // Windows
     static const LineEnding cr;
@@ -26,7 +28,7 @@ private:
     LineEnding(LineEnding&& other) = delete;
     LineEnding& operator=(const LineEnding& other) = delete;
     LineEnding& operator=(LineEnding&& other) = delete;
-    std::string_view m_charSequence;
+    std::string_view m_chars;
     static std::vector<LineEnding*> m_lineEndings;
 };
 
