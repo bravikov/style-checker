@@ -3,6 +3,7 @@
 #include "FilePathReader.hpp"
 #include "AFileStreamReader.hpp"
 #include "LineSplitter.hpp"
+#include "TextLine.hpp"
 
 #include <iostream>
 
@@ -51,6 +52,7 @@ void FileStreamHandler::handler()
 
 #include <fstream>
 #include <filesystem>
+#include <boost/format.hpp>
 
 class AsciiTextChecker
 {
@@ -63,10 +65,12 @@ public:
 
 FileHandler::FileHandler(const std::string &filePath)
 {
-    LineSplitter splitter{""};
-
     std::ifstream file{filePath, std::ios_base::binary};
     if (!file.is_open()) {
+        std::cerr << boost::format(
+            "File: '%1%'\n"
+            "File is not opened.\n"
+        ) % filePath;
         return;
     }
 
@@ -106,14 +110,28 @@ FileHandler::FileHandler(const std::string &filePath)
 
     file.close();
 
+    /* Check empty file */
+
+    if (fileContent.empty()) {
+        std::cerr << boost::format(
+            "File: '%1%'\n"
+            "File is empty.\n"
+        ) % filePath;
+        return;
+    }
+
     /* Check line ending */
 
-    //LineSplitter splitter{fileContent};
+    LineSplitter splitter{fileContent};
 
-
-    /*for (const char& c: fileContent) {
-
-    }*/
+    for (size_t lineCounter = 1; !splitter.eof(); lineCounter++) {
+        auto line = splitter.getNextLine();
+        if (line.lineEnding() != LineEnding::lf) {
+            std::cerr << boost::format(
+                "Line ending is %3%. Line: %2%. File: '%1%'\n"
+            ) % filePath % lineCounter % line.lineEnding().name();
+        }
+    }
 
     /* Check ASCII */
     AsciiTextChecker asciiTextChecker;

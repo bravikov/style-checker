@@ -35,8 +35,12 @@ std::string_view LineEnding::view() const
     return m_chars;
 }
 
-std::string LineEnding::escaped() const
+std::string LineEnding::name() const
 {
+    if (this == &none) {
+        return "none";
+    }
+
     const std::map<char, std::string> replaces{
         {'\n', "\\n"},
         {'\r', "\\r"},
@@ -60,7 +64,13 @@ bool LineEnding::operator==(const LineEnding& other) const
     return this == &other;
 }
 
+bool LineEnding::operator!=(const LineEnding& other) const
+{
+    return this != &other;
+}
+
+
 std::ostream& operator<<(std::ostream& os, const LineEnding& le)
 {
-    return os << le.escaped();
+    return os << le.name();
 }

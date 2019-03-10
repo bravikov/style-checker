@@ -10,7 +10,7 @@ public:
     std::size_t size() const;
     char operator[](const std::size_t position) const;
     std::string_view view() const;
-    std::string escaped() const;
+    std::string name() const;
 
     static const LineEnding none;
     static const LineEnding lf; // Unix-like
@@ -21,6 +21,7 @@ public:
     static const std::vector<LineEnding*>& collection();
 
     bool operator==(const LineEnding& other) const;
+    bool operator!=(const LineEnding& other) const;
 
 private:
     explicit LineEnding(const char* charSequence);
