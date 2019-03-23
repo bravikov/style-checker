@@ -11,8 +11,6 @@
 class AFileStream: public AFileStreamReader
 {
 public:
-    virtual ~AFileStream() = default;
-
     virtual void run() = 0;
 
     std::string getNextFilePath() override;

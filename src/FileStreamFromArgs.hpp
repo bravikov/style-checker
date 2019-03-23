@@ -6,8 +6,11 @@
 class FileStreamFromArgs: public AFileStream
 {
 public:
-    FileStreamFromArgs(const char* argv[], const size_t count);
+    explicit FileStreamFromArgs(const std::vector<std::string>& files);
     void run() override;
+
+private:
+    const std::vector<std::string>& m_files;
 };
 
 #endif // H_ED39819A_A400_4A1C_80F9_04C8BB39D587

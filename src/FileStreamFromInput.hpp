@@ -6,7 +6,6 @@
 class FileStreamFromInput: public AFileStream
 {
 public:
-    virtual ~FileStreamFromInput() = default;
     void run() override;
 };
 

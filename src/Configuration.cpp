@@ -1,7 +1,7 @@
 #include "Configuration.hpp"
 
 #include <boost/program_options.hpp>
-namespace BoostPO = boost::program_options;
+namespace bpo = boost::program_options;
 
 #include <iostream>
 #include <filesystem>
@@ -10,10 +10,10 @@ StyleChecker::Configuration::Configuration(const int argc,
                                            const char * const argv[])
     : m_programName{argv[0]}
 {
-    BoostPO::options_description optionsDescription{"Options"};
+    bpo::options_description optionsDescription{"Options"};
     optionsDescription.add_options()
             ("help,h", "produce help message")
-            ("jobs,j", BoostPO::value<size_t>(&m_jobs)->default_value(1),
+            ("jobs,j", bpo::value<size_t>(&m_jobs)->default_value(1),
              "specifies the number of jobs to run simultaneously")
             ;
 
@@ -21,33 +21,35 @@ StyleChecker::Configuration::Configuration(const int argc,
     optionsDescription.print(ss);
     m_optionsHelp = ss.str();
 
-    BoostPO::options_description hiddenOptionsDescription("Hidden options");
+    bpo::options_description hiddenOptionsDescription("Hidden options");
     hiddenOptionsDescription.add_options()
-            ("input-file", BoostPO::value<std::vector<std::string>>(),
+            ("input-file", bpo::value<std::vector<std::string>>(),
                 "input file")
             ;
 
-    BoostPO::positional_options_description positionalOprionsDescription;
-    positionalOprionsDescription.add("input-file", -1);
+    bpo::positional_options_description positionalOptionsDescription;
+    positionalOptionsDescription.add("input-file", -1);
 
-    BoostPO::options_description allOptionsDescription;
+    bpo::options_description allOptionsDescription;
     allOptionsDescription
             .add(optionsDescription)
             .add(hiddenOptionsDescription);
 
-    BoostPO::variables_map optionsMap;
+    bpo::variables_map optionsMap;
 
-    BoostPO::store(
-        BoostPO::command_line_parser(argc, argv)
+    bpo::store(
+        bpo::command_line_parser(argc, argv)
                 .options(allOptionsDescription)
-                .positional(positionalOprionsDescription).run(),
+                .positional(positionalOptionsDescription).run(),
         optionsMap
     );
-    BoostPO::notify(optionsMap);
+    bpo::notify(optionsMap);
 
     if (optionsMap.count("help")) {
         m_help = true;
     }
+
+    m_files = optionsMap["input-file"].as<std::vector<std::string>>();
 }
 
 std::string StyleChecker::Configuration::helpMessage() const
@@ -70,4 +72,9 @@ bool StyleChecker::Configuration::help() const
 size_t StyleChecker::Configuration::jobs() const
 {
     return m_jobs;
+}
+
+const std::vector<std::string>&StyleChecker::Configuration::files() const
+{
+    return m_files;
 }
