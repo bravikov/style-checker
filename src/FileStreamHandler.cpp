@@ -17,6 +17,7 @@ FileStreamHandler::FileStreamHandler(
     for (size_t t = 0; t < m_maxThreadCount; t++) {
         std::thread handlerThread(&FileStreamHandler::handler, this);
         handlerThread.detach();
+        m_threadCount++;
     }
 }
 
@@ -29,8 +30,6 @@ void FileStreamHandler::wait()
 
 void FileStreamHandler::handler()
 {
-    m_threadCount++;
-
     if (!m_fileStreamReader) {
         return;
     }
