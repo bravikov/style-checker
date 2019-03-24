@@ -49,9 +49,11 @@ void FileStreamHandler::handler()
     m_threadCount--;
 }
 
+#include "Log/Log.hpp"
+
+#include <boost/format.hpp>
 #include <fstream>
 #include <filesystem>
-#include <boost/format.hpp>
 
 class AsciiTextChecker
 {
@@ -66,10 +68,7 @@ FileHandler::FileHandler(const std::string &filePath)
 {
     std::ifstream file{filePath, std::ios_base::binary};
     if (!file.is_open()) {
-        std::cerr << boost::format(
-            "File: '%1%'\n"
-            "File is not opened.\n"
-        ) % filePath;
+        Log::error({"File is not opened.", filePath});
         return;
     }
 
@@ -79,7 +78,7 @@ FileHandler::FileHandler(const std::string &filePath)
         const std::uintmax_t fileSize = std::filesystem::file_size(filePath);
         fileContent.reserve(fileSize);
     } catch(std::filesystem::filesystem_error& e) {
-        std::cerr << e.what() << std::endl;
+        Log::error({e.what(), filePath});
         return;
     }
 
@@ -96,8 +95,7 @@ FileHandler::FileHandler(const std::string &filePath)
         fileContent.append(readBuffer, readCount);
 
         if (file.bad()) {
-            std::cerr << "File handling error. File: '" << filePath << "'."
-                      << std::endl;
+            Log::error({"File handling error.", filePath});
             error = true;
             break;
         }
@@ -112,10 +110,7 @@ FileHandler::FileHandler(const std::string &filePath)
     /* Check empty file */
 
     if (fileContent.empty()) {
-        std::cerr << boost::format(
-            "File: '%1%'\n"
-            "File is empty.\n"
-        ) % filePath;
+        Log::diagnostic({"File is empty.", filePath});
         return;
     }
 
@@ -126,9 +121,9 @@ FileHandler::FileHandler(const std::string &filePath)
     for (size_t lineCounter = 1; !splitter.eof(); lineCounter++) {
         auto line = splitter.getNextLine();
         if (line.lineEnding() != LineEnding::lf) {
-            std::cerr << boost::format(
-                "Line ending is %3%. Line: %2%. File: '%1%'\n"
-            ) % filePath % lineCounter % line.lineEnding().name();
+            const auto message = boost::format("Line ending is %1%.")
+                                 % line.lineEnding().name();
+            Log::diagnostic({message.str(), filePath, lineCounter});
         }
     }
 
@@ -136,8 +131,7 @@ FileHandler::FileHandler(const std::string &filePath)
     AsciiTextChecker asciiTextChecker;
     for (const char& c: fileContent) {
         if (!asciiTextChecker.check(c)) {
-            std::cerr << "Non-ASCII character in the file (" << filePath << ")"
-                      << std::endl;
+            Log::diagnostic({"There is non-ASCII character.", filePath});
         }
     }
 

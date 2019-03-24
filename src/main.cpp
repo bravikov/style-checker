@@ -3,6 +3,8 @@
 #include "FileStreamHandler.hpp"
 #include "Configuration.hpp"
 #include "AFileStream.hpp"
+#include "Log/Log.hpp"
+#include "Log/ConsoleLogger.hpp"
 
 #include <iostream>
 #include <string>
@@ -25,6 +27,8 @@ int main(int argc, char* argv[])
     else {
         fileStream = std::make_unique<FileStreamFromArgs>(files);
     }
+
+    Log::initialize(std::make_unique<ConsoleLogger>());
 
     FileStreamHandler fileStreamHandler{fileStream.get(), configuration.jobs()};
     fileStream->run();

@@ -33,6 +33,14 @@ add_executable(style-checker
     src/LineSplitter.cpp
     src/TextLine.hpp
     src/TextLine.cpp
+
+    src/Log/ALogger.hpp
+    src/Log/ConsoleLogger.hpp
+    src/Log/ConsoleLogger.cpp
+    src/Log/LogData.hpp
+    src/Log/LogData.cpp
+    src/Log/Log.hpp
+    src/Log/Log.cpp
 )
 
 set_property(TARGET style-checker PROPERTY CXX_STANDARD 17)
