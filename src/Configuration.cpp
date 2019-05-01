@@ -49,7 +49,9 @@ StyleChecker::Configuration::Configuration(const int argc,
         m_help = true;
     }
 
-    m_files = optionsMap["input-file"].as<std::vector<std::string>>();
+    if (optionsMap.count("input-file")) {
+        m_files = optionsMap["input-file"].as<std::vector<std::string>>();
+    }
 }
 
 std::string StyleChecker::Configuration::helpMessage() const
