@@ -92,11 +92,11 @@ BOOST_AUTO_TEST_CASE(EmptyLine)
 
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "");
-    BOOST_TEST(line1.lineEnding() == LineEnding::none);
+    BOOST_TEST(line1.ending() == LineEnding::none);
 
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(LineWithoutEnding)
@@ -104,10 +104,10 @@ BOOST_AUTO_TEST_CASE(LineWithoutEnding)
     LineSplitter lineSplitter{"test"};
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "test");
-    BOOST_TEST(line1.lineEnding() == LineEnding::none);
+    BOOST_TEST(line1.ending() == LineEnding::none);
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(LineWithEnding1)
@@ -115,10 +115,10 @@ BOOST_AUTO_TEST_CASE(LineWithEnding1)
     LineSplitter lineSplitter{"test\n"};
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "test");
-    BOOST_TEST(line1.lineEnding() == LineEnding::lf);
+    BOOST_TEST(line1.ending() == LineEnding::lf);
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(LineWithEnding2)
@@ -126,10 +126,10 @@ BOOST_AUTO_TEST_CASE(LineWithEnding2)
     LineSplitter lineSplitter{"test\r\n"};
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "test");
-    BOOST_TEST(line1.lineEnding() == LineEnding::crlf);
+    BOOST_TEST(line1.ending() == LineEnding::crlf);
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(OnlyLineEnding)
@@ -137,10 +137,10 @@ BOOST_AUTO_TEST_CASE(OnlyLineEnding)
     LineSplitter lineSplitter{"\n"};
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "");
-    BOOST_TEST(line1.lineEnding() == LineEnding::lf);
+    BOOST_TEST(line1.ending() == LineEnding::lf);
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(OnlyLineEnding2)
@@ -148,10 +148,10 @@ BOOST_AUTO_TEST_CASE(OnlyLineEnding2)
     LineSplitter lineSplitter{"\r\n"};
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == "");
-    BOOST_TEST(line1.lineEnding() == LineEnding::crlf);
+    BOOST_TEST(line1.ending() == LineEnding::crlf);
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == "");
-    BOOST_TEST(line2.lineEnding() == LineEnding::none);
+    BOOST_TEST(line2.ending() == LineEnding::none);
 }
 
 BOOST_AUTO_TEST_CASE(ComplexTest)
@@ -160,17 +160,17 @@ BOOST_AUTO_TEST_CASE(ComplexTest)
 
     const auto line1 = lineSplitter.getNextLine();
     BOOST_TEST(line1.text() == " Line1 ");
-    BOOST_TEST(line1.lineEnding() == LineEnding::lf);
+    BOOST_TEST(line1.ending() == LineEnding::lf);
 
     const auto line2 = lineSplitter.getNextLine();
     BOOST_TEST(line2.text() == " Line2 ");
-    BOOST_TEST(line2.lineEnding() == LineEnding::crlf);
+    BOOST_TEST(line2.ending() == LineEnding::crlf);
 
     const auto line3 = lineSplitter.getNextLine();
     BOOST_TEST(line3.text() == " Line3 ");
-    BOOST_TEST(line3.lineEnding() == LineEnding::lfcr);
+    BOOST_TEST(line3.ending() == LineEnding::lfcr);
 
     const auto line4 = lineSplitter.getNextLine();
     BOOST_TEST(line4.text() == " Line4 ");
-    BOOST_TEST(line4.lineEnding() == LineEnding::none);
+    BOOST_TEST(line4.ending() == LineEnding::none);
 }

@@ -33,6 +33,9 @@ add_executable(style-checker
     src/LineSplitter.cpp
     src/TextLine.hpp
     src/TextLine.cpp
+    src/Diagnostics.hpp
+    src/Diagnostics.cpp
+    src/Algorithm.hpp
 
     src/Log/ALogger.hpp
     src/Log/ConsoleLogger.hpp
